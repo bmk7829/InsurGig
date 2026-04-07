@@ -1,0 +1,39 @@
+from fastapi import APIRouter, Depends
+from pydantic import BaseModel
+from sqlalchemy.orm import Session
+from database.database import get_db
+from models.models import RiskLog
+from services.risk_service import calculate_risk
+
+router = APIRouter()
+
+class RiskRequest(BaseModel):
+    user_id: int
+    city: str
+    latitude: float
+    longitude: float
+    claim_reason: str = None
+
+@router.post("/calculate-risk")
+def check_risk(request: RiskRequest, db: Session = Depends(get_db)):
+    # Run paramtric analysis
+    results = calculate_risk(
+        city=request.city,
+        lat=request.latitude,
+        lon=request.longitude,
+        claim_reason=request.claim_reason
+    )
+    
+    # Store the telemetry event into the database only if it's a registered user
+    if request.user_id != 0:
+        log = RiskLog(
+            user_id=request.user_id,
+            city=request.city,
+            location=f"{request.latitude}, {request.longitude}",
+            risk_score=results["risk_score"],
+            risk_level=results["risk_level"]
+        )
+        db.add(log)
+        db.commit()
+    
+    return results

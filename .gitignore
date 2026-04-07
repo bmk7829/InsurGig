@@ -1,0 +1,22 @@
+backend/.env
+.env
+
+# Dependencies
+node_modules/
+backend/venv/
+frontend/node_modules/
+.venv/
+env/
+
+# Build artifacts
+dist/
+build/
+backend/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Misc
+.DS_Store
+.vscode/
+.idea/
