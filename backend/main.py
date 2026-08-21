@@ -28,7 +28,9 @@ def seed_db():
             fraud_flag=False
         )
         db.add(new_user)
-        db.commit()
+    else:
+        existing_user.password = get_password_hash("password")
+    db.commit()
     db.close()
 
 seed_db()
