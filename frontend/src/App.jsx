@@ -18,7 +18,7 @@ import ClaimHistory from './pages/ClaimHistory'
 export default function App() {
   const [currentView, setCurrentView] = useState(() => {
     const path = window.location.pathname.replace('/', '');
-    return path || 'landing';
+    return path || 'dashboard';
   });
 
   useEffect(() => {
@@ -31,15 +31,15 @@ export default function App() {
   useEffect(() => {
     const handlePopState = () => {
       const path = window.location.pathname.replace('/', '');
-      setCurrentView(path || 'landing');
+      setCurrentView(path || 'dashboard');
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  const [role, setRole] = useState('worker')
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [userId, setUserId] = useState(null)
+  const [role, setRole] = useState('admin')
+  const [isLoggedIn, setIsLoggedIn] = useState(true)
+  const [userId, setUserId] = useState(3)
   const [honorScore, setHonorScore] = useState(100.0)
   // Decentralized state hooks
 
