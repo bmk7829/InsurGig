@@ -24,7 +24,10 @@ export default function Auth({ role, setRole, setUserId, setUserName, setSubscri
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ email: authForm.email, password: authForm.password })
       });
-      if (!res.ok) { setAuthError("Access Denied: Invalid Email or Password."); return; }
+      if (!res.ok) { 
+          setAuthError("Access Denied: Invalid Email or Password. Please try creating an account."); 
+          return; 
+      }
       const data = await res.json();
       setRole(data.role); 
       setUserId(data.user_id);
@@ -45,8 +48,9 @@ export default function Auth({ role, setRole, setUserId, setUserName, setSubscri
     } catch (e) {
       console.error("Auth Offline:", e);
       setAuthError("Network Error: InsurGig AI Server is currently offline.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   const handleRegSubmit = async () => {
@@ -64,15 +68,19 @@ export default function Auth({ role, setRole, setUserId, setUserName, setSubscri
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(payload)
       });
-      if (!res.ok) { setAuthError("Registration Failed: Email might be in use."); return; }
+      if (!res.ok) { 
+          setAuthError("Registration Failed: Email might be in use."); 
+          return; 
+      }
       setAuthSuccess("Account created! Please login.");
       setAuthMode('login');
       setAuthForm({...authForm, email: regForm.email, password: regForm.password});
     } catch (e) {
       console.error("Auth Offline:", e);
       setAuthError("Network Error: InsurGig AI Server is currently offline.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   return (
