@@ -9,6 +9,29 @@ from routes import auth, risk, claims, plans, admin
 # Initialize DB Tables directly (in a real production app use Alembic for migrations)
 Base.metadata.create_all(bind=engine)
 
+from database.database import SessionLocal
+from models.models import User
+from services.auth_service import get_password_hash
+
+def seed_db():
+    db = SessionLocal()
+    admin_email = "bmk7829@gmail.com"
+    existing_user = db.query(User).filter(User.email == admin_email).first()
+    if not existing_user:
+        new_user = User(
+            name="Manoj",
+            email=admin_email,
+            password=get_password_hash("password"),
+            city="Delhi",
+            role="admin",
+            trust_score=100.0,
+            fraud_flag=False
+        )
+        db.add(new_user)
+        db.commit()
+    db.close()
+
+seed_db()
 app = FastAPI(title="InsurGig AI API", description="Predictive Security & Automated Claims for Gig Workers")
 
 # Configure CORS for React frontend connecting from localhost during demo
