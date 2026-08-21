@@ -5,7 +5,7 @@ import bcrypt
 # Secret key for JWTs - in production this should be in an environment variable!
 SECRET_KEY = "INSURGIG_SUPER_SECRET_KEY"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 # 1 Day
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 # 7 Days
 
 def verify_password(plain_password, hashed_password):
     if isinstance(hashed_password, str):
