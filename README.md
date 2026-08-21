@@ -1,7 +1,13 @@
-# InsurGig AI
-AI-Powered Parametric Insurance for India's Gig Delivery Workers
+# InsurGig AI 🛡️
+**AI-Powered Parametric Insurance for India's Gig Delivery Workers**
 
 Guidewire DEVTrails Hackathon 2026
+
+## 🚀 Live Demo
+* **Live Dashboard:** [https://insurgig-eqvn.vercel.app](https://insurgig-eqvn.vercel.app)
+* **Backend API:** [https://insurgig-production.up.railway.app](https://insurgig-production.up.railway.app)
+
+*(Note: The login flow is currently bypassed for hackathon evaluation purposes. You will be automatically logged in as an Admin).*
 
 ## Team: CoreX
 
