@@ -14,7 +14,13 @@ app = FastAPI(title="InsurGig AI API", description="Predictive Security & Automa
 # Configure CORS for React frontend connecting from localhost during demo
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Allow all for demo purposes
+    allow_origins=[
+        "http://localhost:5173", 
+        "http://127.0.0.1:5173",
+        "https://insurgig-sigma.vercel.app", 
+        "https://insurgig.vercel.app",
+        "https://insurgig-eqvn.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
