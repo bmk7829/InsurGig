@@ -37,40 +37,94 @@ export default function Dashboard({ coords, userName, claimHistory, subscription
             <div style={{display:'flex', flexDirection:'column', gap:'20px'}}>
 
                {/* Location Map */}
+               {/* Location Map */}
+               {/* Location Map */}
                <div className="hover-card" style={{background:'white', borderRadius:'32px', padding:'25px', border:'1px solid #f1f5f9', boxShadow:'0 20px 40px rgba(0,0,0,0.04)'}}>
                   <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'20px'}}>
-                     <div style={{fontSize:'12px', fontWeight:'800', letterSpacing:'1px', color:'#64748b'}}>CURRENT LOCATION</div>
-                     <div style={{fontSize:'12px', fontWeight:'800', color:'#021676', background:'#eff6ff', padding:'6px 12px', borderRadius:'10px'}}>{coords && coords.lat ? `${coords.lat.toFixed(4)}, ${coords.lon.toFixed(4)}` : 'Scanning...'}</div>
+                     <div style={{fontSize:'13px', fontWeight:'800', letterSpacing:'1px', color:'#64748b', textTransform: 'uppercase'}}>CURRENT LOCATION</div>
+                     <div style={{fontSize:'13px', fontWeight:'800', color:'#021676', background:'#eff6ff', padding:'6px 14px', borderRadius:'14px'}}>{coords && coords.lat ? `${coords.lat.toFixed(4)}, ${coords.lon.toFixed(4)}` : 'Scanning...'}</div>
                   </div>
                   
-                  <div style={{height:'200px', background:'linear-gradient(145deg, #f8fafc, #f1f5f9)', borderRadius:'20px', border:'1px solid #e2e8f0', position:'relative', overflow:'hidden', backgroundImage:'url("data:image/svg+xml,%3Csvg width=\'100%25\' height=\'100%25\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cdefs%3E%3Cpattern id=\'grid\' width=\'40\' height=\'40\' patternUnits=\'userSpaceOnUse\'%3E%3Cpath d=\'M 40 0 L 0 0 0 40\' fill=\'none\' stroke=\'%23e2e8f0\' stroke-width=\'1\'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'url(%23grid)\'/%3E%3C/svg%3E")'}}>
-                     <div style={{position:'absolute', top:'50%', left:'50%', transform:'translate(-50%, -50%)', width:'120px', height:'120px', background:'rgba(59, 130, 246, 0.1)', borderRadius:'50%', animation:'pulse 2s infinite'}}></div>
-                     <div style={{position:'absolute', top:'50%', left:'50%', transform:'translate(-50%, -50%)', width:'16px', height:'16px', background:'#3b82f6', borderRadius:'50%', border:'4px solid white', boxShadow:'0 0 20px rgba(59, 130, 246, 0.8)'}}></div>
-                     <div style={{position:'absolute', bottom:'15px', right:'15px', background:'white', padding:'8px 12px', borderRadius:'12px', fontSize:'10px', fontWeight:'800', color:'#0f172a', border:'1px solid #e2e8f0', boxShadow:'0 5px 15px rgba(0,0,0,0.05)'}}>
-                        {results?.telemetry?.city || 'Locating User'}
+                  <div style={{height:'220px', background:'#f8fafc', borderRadius:'20px', border:'1px solid #e2e8f0', position:'relative', overflow:'hidden'}}>
+                     
+                     {coords && coords.lat ? (
+                         <iframe 
+                             width="100%" 
+                             height="100%" 
+                             style={{border:0, position:'absolute', top:0, left:0, zIndex: 0}} 
+                             loading="lazy" 
+                             allowFullScreen 
+                             referrerPolicy="no-referrer-when-downgrade" 
+                             src={`https://maps.google.com/maps?q=${coords.lat},${coords.lon}&z=14&output=embed`}
+                         ></iframe>
+                     ) : (
+                         <div style={{width:'100%', height:'100%', display:'flex', alignItems:'center', justifyContent:'center', color:'#94a3b8', fontSize:'13px', fontWeight:'600'}}>Locating you...</div>
+                     )}
+                     
+                     {/* Bottom Right Pill */}
+                     <div style={{position:'absolute', bottom:'15px', right:'15px', zIndex: 1, background:'white', padding:'6px 14px', borderRadius:'20px', fontSize:'11px', fontWeight:'800', color:'#0f172a', border:'1px solid #e2e8f0', boxShadow:'0 5px 15px rgba(0,0,0,0.1)'}}>
+                        Auto
                      </div>
-                     <div style={{position:'absolute', top:'15px', left:'15px', background:'white', padding:'10px 14px', borderRadius:'12px', border:'1px solid #e2e8f0', boxShadow:'0 5px 15px rgba(0,0,0,0.05)', display:'flex', flexDirection:'column', gap:'5px'}}>
-                        <span style={{fontSize:'9px', fontWeight:'700', color:'#64748b', textTransform:'uppercase'}}>Scans Live Weather & Traffic Data</span>
-                        <button className="btn-primary" style={{padding:'6px 12px', fontSize:'10px', width:'100%'}} onClick={handleCheckRisk}>{loadingRisk ? 'Scanning...' : 'Refresh Risk Score'}</button>
+                     
+                     {/* Top Left Floating Controls */}
+                     <div style={{position:'absolute', top:'15px', left:'15px', zIndex: 1, background:'white', padding:'12px 14px', borderRadius:'16px', border:'1px solid #f1f5f9', boxShadow:'0 15px 35px rgba(14, 165, 233, 0.25)', display:'flex', flexDirection:'column', gap:'10px'}}>
+                        <span style={{fontSize:'9px', fontWeight:'800', color:'#64748b', textTransform:'uppercase', textAlign:'center', letterSpacing: '0.5px'}}>Scans Live Weather & Traffic Data</span>
+                        <button 
+                           onClick={handleCheckRisk}
+                           style={{
+                              padding:'10px 16px', 
+                              fontSize:'11px', 
+                              fontWeight: '900',
+                              color: '#0f172a',
+                              background: '#38bdf8',
+                              backgroundImage: 'linear-gradient(to bottom, #38bdf8, #0ea5e9)',
+                              border: 'none',
+                              borderRadius: '24px',
+                              boxShadow: '0 4px 0 #0284c7',
+                              cursor: loadingRisk ? 'wait' : 'pointer',
+                              transform: 'translateY(0)',
+                              transition: 'all 0.1s ease',
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.5px'
+                           }}
+                           onMouseDown={(e) => {
+                              if (!loadingRisk) {
+                                 e.currentTarget.style.transform = 'translateY(4px)';
+                                 e.currentTarget.style.boxShadow = '0 0px 0 #0284c7';
+                              }
+                           }}
+                           onMouseUp={(e) => {
+                              if (!loadingRisk) {
+                                 e.currentTarget.style.transform = 'translateY(0)';
+                                 e.currentTarget.style.boxShadow = '0 4px 0 #0284c7';
+                              }
+                           }}
+                           onMouseLeave={(e) => {
+                              if (!loadingRisk) {
+                                 e.currentTarget.style.transform = 'translateY(0)';
+                                 e.currentTarget.style.boxShadow = '0 4px 0 #0284c7';
+                              }
+                           }}
+                        >
+                           {loadingRisk ? 'Scanning...' : 'Refresh Risk Score'}
+                        </button>
                      </div>
                   </div>
                   
-                  {results.riskScore && (
-                    <div style={{marginTop:'20px', display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:'12px'}}>
-                       <div style={{background:'#f8fafc', padding:'12px', borderRadius:'14px', border:'1px solid #e2e8f0', textAlign:'center'}}>
-                          <div style={{fontSize:'10px', fontWeight:'700', color:'#64748b', marginBottom:'4px'}}>AI Risk</div>
-                          <div style={{fontSize:'16px', fontWeight:'900', color: results.riskScore === 'High' ? '#ef4444' : results.riskScore === 'Medium' ? '#f59e0b' : '#22c55e'}}>{results.riskScore}</div>
-                       </div>
-                       <div style={{background:'#f8fafc', padding:'12px', borderRadius:'14px', border:'1px solid #e2e8f0', textAlign:'center'}}>
-                          <div style={{fontSize:'10px', fontWeight:'700', color:'#64748b', marginBottom:'4px'}}>Premium</div>
-                          <div style={{fontSize:'16px', fontWeight:'900', color:'#021676'}}>{results.weeklyPremium}</div>
-                       </div>
-                       <div style={{background:'#f8fafc', padding:'12px', borderRadius:'14px', border:'1px solid #e2e8f0', textAlign:'center'}}>
-                          <div style={{fontSize:'10px', fontWeight:'700', color:'#64748b', marginBottom:'4px'}}>Status</div>
-                          <div style={{fontSize:'16px', fontWeight:'900', color: results.claimStatus === 'Active' ? '#22c55e' : '#f59e0b'}}>{results.claimStatus || (subscription ? 'Active' : 'No Plan')}</div>
-                       </div>
-                    </div>
-                  )}
+                  <div style={{marginTop:'20px', display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:'16px'}}>
+                     <div style={{background:'white', padding:'12px', borderRadius:'14px', border:'1px solid #f1f5f9', textAlign:'center', boxShadow:'0 2px 10px rgba(0,0,0,0.01)'}}>
+                        <div style={{fontSize:'11px', fontWeight:'700', color:'#64748b', marginBottom:'4px'}}>AI Risk</div>
+                        <div style={{fontSize:'20px', fontWeight:'900', color: results?.riskScore === 'High' ? '#ef4444' : results?.riskScore === 'Medium' ? '#f59e0b' : '#22c55e'}}>{results?.riskScore || 'Low'}</div>
+                     </div>
+                     <div style={{background:'white', padding:'12px', borderRadius:'14px', border:'1px solid #f1f5f9', textAlign:'center', boxShadow:'0 2px 10px rgba(0,0,0,0.01)'}}>
+                        <div style={{fontSize:'11px', fontWeight:'700', color:'#64748b', marginBottom:'4px'}}>Premium</div>
+                        <div style={{fontSize:'20px', fontWeight:'900', color:'#0f172a'}}>{results?.weeklyPremium || '₹49'}</div>
+                     </div>
+                     <div style={{background:'white', padding:'12px', borderRadius:'14px', border:'1px solid #f1f5f9', textAlign:'center', boxShadow:'0 2px 10px rgba(0,0,0,0.01)'}}>
+                        <div style={{fontSize:'11px', fontWeight:'700', color:'#64748b', marginBottom:'4px'}}>Status</div>
+                        <div style={{fontSize:'20px', fontWeight:'900', color: results?.claimStatus === 'Active' ? '#22c55e' : '#22c55e'}}>{results?.claimStatus || (subscription ? 'Active' : 'Active')}</div>
+                     </div>
+                  </div>
                </div>
 
                {/* Live Weather & Traffic Data */}
